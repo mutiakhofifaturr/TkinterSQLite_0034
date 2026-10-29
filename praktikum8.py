@@ -50,3 +50,27 @@ def ambil_semua_pasien():
     data = cur.fetchall()
     conn.close()
     return data
+
+def prediksi_risiko(gula, bmi, riwayat):
+    """
+    Aturan prediksi:
+    - Gula >= 200            : Tinggi / Sangat Tinggi
+    - Gula 140 - 199         : Sedang / Tinggi (tergantung BMI & riwayat ortu)
+    - Gula < 140, BMI >= 30  : Waspada / Sedang
+    - Gula < 140, BMI < 30, riwayat Ya    : Waspada
+    - Gula < 140, BMI < 30, riwayat Tidak : Rendah
+    """
+    ada_riwayat = riwayat == "Ya"
+    obesitas = bmi >= 30
+    jumlah_faktor = int(obesitas) + int(ada_riwayat)  # 0, 1, atau 2
+
+    if gula >= 200:
+        return "Sangat Tinggi" if jumlah_faktor >= 1 else "Tinggi"
+
+    if 140 <= gula < 200:
+        return "Tinggi" if jumlah_faktor >= 1 else "Sedang"
+
+    if obesitas:
+        return "Sedang" if ada_riwayat else "Waspada"
+
+    return "Waspada" if ada_riwayat else "Rendah"
