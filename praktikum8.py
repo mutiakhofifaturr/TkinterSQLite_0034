@@ -183,3 +183,23 @@ class AplikasiDiabetes:
             return None
 
         return nama, usia, gula, bmi, riwayat
+
+    def proses_prediksi(self):
+        data = self.validasi_input()
+        if data is None:
+            return
+        nama, usia, gula, bmi, riwayat = data
+
+        hasil = prediksi_risiko(gula, bmi, riwayat)
+        simpan_pasien(nama, usia, gula, bmi, riwayat, hasil)
+
+        self.label_hasil.config(text=f"Risiko {hasil}", bg=WARNA_RISIKO[hasil],
+                                fg="black" if hasil == "Waspada" else "white")
+        self.label_keterangan.config(text=f"Data pasien '{nama}' berhasil disimpan ke database.")
+
+    def reset_form(self):
+        for e in (self.entry_nama, self.entry_usia, self.entry_gula, self.entry_bmi):
+            e.delete(0, tk.END)
+        self.combo_riwayat.set("Pilih...")
+        self.label_hasil.config(text="-", bg="#e0e0e0", fg="black")
+        self.label_keterangan.config(text="")
