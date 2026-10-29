@@ -25,3 +25,28 @@ def buat_database():
     )
     conn.commit()
     conn.close()
+
+
+def simpan_pasien(nama, usia, gula, bmi, riwayat, hasil):
+    """Menyimpan satu data pasien ke database."""
+    conn = sqlite3.connect(DB_NAME)
+    cur = conn.cursor()
+    cur.execute(
+        """
+        INSERT INTO pasien (nama_pasien, usia, gula_darah, bmi, riwayat_ortu, hasil_prediksi)
+        VALUES (?, ?, ?, ?, ?, ?)
+        """,
+        (nama, usia, gula, bmi, riwayat, hasil),
+    )
+    conn.commit()
+    conn.close()
+
+
+def ambil_semua_pasien():
+    """Mengambil seluruh data pasien dari database."""
+    conn = sqlite3.connect(DB_NAME)
+    cur = conn.cursor()
+    cur.execute("SELECT id, nama_pasien, usia, gula_darah, bmi, riwayat_ortu, hasil_prediksi FROM pasien")
+    data = cur.fetchall()
+    conn.close()
+    return data
