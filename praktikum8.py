@@ -135,3 +135,51 @@ class AplikasiDiabetes:
 
         self.label_keterangan = tk.Label(root, text="", font=("Arial", 9), fg="gray", wraplength=400)
         self.label_keterangan.pack(pady=5)
+
+    def validasi_input(self):
+        """Mengembalikan tuple data valid, atau None jika ada input yang salah."""
+        nama = self.entry_nama.get().strip()
+        usia_str = self.entry_usia.get().strip()
+        gula_str = self.entry_gula.get().strip()
+        bmi_str = self.entry_bmi.get().strip()
+        riwayat = self.combo_riwayat.get()
+
+        if not nama:
+            messagebox.showwarning("Validasi", "Nama pasien tidak boleh kosong.")
+            return None
+        if not all(c.isalpha() or c.isspace() or c in ".'-" for c in nama):
+            messagebox.showwarning("Validasi", "Nama pasien hanya boleh berisi huruf.")
+            return None
+
+        try:
+            usia = int(usia_str)
+        except ValueError:
+            messagebox.showwarning("Validasi", "Usia harus berupa bilangan bulat.")
+            return None
+        if not 1 <= usia <= 120:
+            messagebox.showwarning("Validasi", "Usia harus antara 1 - 120 tahun.")
+            return None
+
+        try:
+            gula = float(gula_str.replace(",", "."))
+        except ValueError:
+            messagebox.showwarning("Validasi", "Gula darah harus berupa angka.")
+            return None
+        if not 20 <= gula <= 600:
+            messagebox.showwarning("Validasi", "Gula darah harus antara 20 - 600 mg/dL.")
+            return None
+
+        try:
+            bmi = float(bmi_str.replace(",", "."))
+        except ValueError:
+            messagebox.showwarning("Validasi", "BMI harus berupa angka.")
+            return None
+        if not 10 <= bmi <= 70:
+            messagebox.showwarning("Validasi", "BMI harus antara 10 - 70.")
+            return None
+
+        if riwayat not in ("Ya", "Tidak"):
+            messagebox.showwarning("Validasi", "Silakan pilih riwayat diabetes orang tua (Ya/Tidak).")
+            return None
+
+        return nama, usia, gula, bmi, riwayat
