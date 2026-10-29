@@ -74,3 +74,12 @@ def prediksi_risiko(gula, bmi, riwayat):
         return "Sedang" if ada_riwayat else "Waspada"
 
     return "Waspada" if ada_riwayat else "Rendah"
+
+
+WARNA_RISIKO = {
+    "Rendah": "#2e7d32",         # hijau
+    "Waspada": "#f9a825",        # kuning
+    "Sedang": "#ef6c00",         # oranye
+    "Tinggi": "#d32f2f",         # merah
+    "Sangat Tinggi": "#6a1b1b",  # merah tua
+}
